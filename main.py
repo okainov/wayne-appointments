@@ -1,3 +1,4 @@
+import logging
 import os
 
 from telegram import Update, Message
@@ -5,6 +6,9 @@ from telegram.ext import Application, MessageHandler, filters
 
 from api import Wayne
 
+logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s',
+                    level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 async def echo(update: Update, context):
     msg: Message = update.message
@@ -19,6 +23,7 @@ async def echo(update: Update, context):
         try:
             appts = wayne.get_appointments()
         except Exception as e:
+            logger.error("Error", exc_info=e)
             await msg.reply_text(f"{e}")
             return
         if appts["status"] == "ok":

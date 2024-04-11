@@ -10,6 +10,8 @@ class Wayne:
     def get_token(self, response):
         text = response.text
         tokens = re.findall("__RequestVerificationToken.*?value=\"(.*?)\"", text)
+        if not tokens:
+            raise Exception("No token in " + text)
         return tokens[0]
 
     def get_appointments(self):
